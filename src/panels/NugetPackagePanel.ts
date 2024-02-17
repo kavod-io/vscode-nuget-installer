@@ -1,40 +1,30 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
-import { getUri } from "../utilities/getUri";
-import { getNonce } from "../utilities/getNonce";
+import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode"
+import { getUri } from "../utilities/getUri"
+import { getNonce } from "../utilities/getNonce"
 
-/**
- * This class manages the state and behavior of HelloWorld webview panels.
- *
- * It contains all the data and methods for:
- *
- * - Creating and rendering HelloWorld webview panels
- * - Properly cleaning up and disposing of webview resources when the panel is closed
- * - Setting the HTML (and by proxy CSS/JavaScript) content of the webview panel
- * - Setting message listeners so data can be passed between the webview and extension
- */
-export class HelloWorldPanel {
-  public static currentPanel: HelloWorldPanel | undefined;
-  private readonly _panel: WebviewPanel;
-  private _disposables: Disposable[] = [];
+export class NugetPackagePanel {
+  public static currentPanel: NugetPackagePanel | undefined
+  private readonly _panel: WebviewPanel
+  private _disposables: Disposable[] = []
 
   /**
-   * The HelloWorldPanel class private constructor (called only from the render method).
+   * The NugetPackagePanel class private constructor (called only from the render method).
    *
    * @param panel A reference to the webview panel
    * @param extensionUri The URI of the directory containing the extension
    */
   private constructor(panel: WebviewPanel, extensionUri: Uri) {
-    this._panel = panel;
+    this._panel = panel
 
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
     // the panel or when the panel is closed programmatically)
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
 
     // Set the HTML content for the webview panel
-    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri);
+    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri)
 
     // Set an event listener to listen for messages passed from the webview context
-    this._setWebviewMessageListener(this._panel.webview);
+    this._setWebviewMessageListener(this._panel.webview)
   }
 
   /**
@@ -44,21 +34,24 @@ export class HelloWorldPanel {
    * @param extensionUri The URI of the directory containing the extension.
    */
   public static render(extensionUri: Uri) {
-    if (HelloWorldPanel.currentPanel) {
+    if (NugetPackagePanel.currentPanel) {
       // If the webview panel already exists reveal it
-      HelloWorldPanel.currentPanel._panel.reveal(ViewColumn.One);
+      NugetPackagePanel.currentPanel._panel.reveal(ViewColumn.One)
     } else {
       const panel = window.createWebviewPanel(
-        "showHelloWorld",
-        "Hello World",
+        "showNugetPackageManager",
+        "Nuget Package Manager",
         ViewColumn.One,
         {
           enableScripts: true,
-          localResourceRoots: [Uri.joinPath(extensionUri, "out"), Uri.joinPath(extensionUri, "webview-ui/build")],
+          localResourceRoots: [
+            Uri.joinPath(extensionUri, "out"),
+            Uri.joinPath(extensionUri, "webview-ui/build"),
+          ],
         }
-      );
+      )
 
-      HelloWorldPanel.currentPanel = new HelloWorldPanel(panel, extensionUri);
+      NugetPackagePanel.currentPanel = new NugetPackagePanel(panel, extensionUri)
     }
   }
 
@@ -66,14 +59,14 @@ export class HelloWorldPanel {
    * Cleans up and disposes of webview resources when the webview panel is closed.
    */
   public dispose() {
-    HelloWorldPanel.currentPanel = undefined;
+    NugetPackagePanel.currentPanel = undefined
 
-    this._panel.dispose();
+    this._panel.dispose()
 
     while (this._disposables.length) {
-      const disposable = this._disposables.pop();
+      const disposable = this._disposables.pop()
       if (disposable) {
-        disposable.dispose();
+        disposable.dispose()
       }
     }
   }
@@ -90,9 +83,9 @@ export class HelloWorldPanel {
    * rendered within the webview panel
    */
   private _getWebviewContent(webview: Webview, extensionUri: Uri) {
-    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"]);
-    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"]);
-    const nonce = getNonce();
+    const stylesUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.css"])
+    const scriptUri = getUri(webview, extensionUri, ["webview-ui", "build", "assets", "index.js"])
+    const nonce = getNonce()
 
     return /*html*/ `
       <!DOCTYPE html>
@@ -109,7 +102,7 @@ export class HelloWorldPanel {
           <script type="module" nonce="${nonce}" src="${scriptUri}"></script>
         </body>
       </html>
-    `;
+    `
   }
 
   /**
@@ -122,20 +115,20 @@ export class HelloWorldPanel {
   private _setWebviewMessageListener(webview: Webview) {
     webview.onDidReceiveMessage(
       (message: any) => {
-        const command = message.command;
-        const text = message.text;
+        const command = message.command
+        const text = message.text
 
         switch (command) {
           case "hello":
             // Code that should run in response to the hello message command
-            window.showInformationMessage(text);
-            return;
+            window.showInformationMessage(text)
+            return
           // Add more switch case statements here as more webview message commands
           // are created within the webview context (i.e. inside media/main.js)
         }
       },
       undefined,
       this._disposables
-    );
+    )
   }
 }
