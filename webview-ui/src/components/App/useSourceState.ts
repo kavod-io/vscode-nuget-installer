@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { PackageSource } from "../../contracts"
 import { fetchSources } from "../../clients/extension"
 
@@ -10,13 +10,16 @@ const useSourceState = () => {
     const initializeSources = async () => {
       const sources = await fetchSources()
       setSources(sources)
+      if (sources && sources.length > 0) {
+        setCurrentSource(sources[0])
+      }
     }
     initializeSources()
   }, [])
 
-  const updateCurrentSource = (source: PackageSource | null) => {
+  const updateCurrentSource = useCallback((source: PackageSource | null) => {
     setCurrentSource(source)
-  }
+  }, [])
 
   return {
     sources,

@@ -40,7 +40,7 @@ const Search = ({
   return (
     <>
       <div className="package-search">
-        <input type="text" value={searchText} onChange={handleTextChange} />
+        <input type="text" id="search-text" value={searchText} onChange={handleTextChange} />
         <input
           type="checkbox"
           id="include-prerelease"

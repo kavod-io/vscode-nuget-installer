@@ -12,6 +12,11 @@ main {
 
 .package-search {
   align-self: center;
+
+  #search-text {
+    width: 300px;
+    margin-right: 5px;
+  }
 }
 
 .source-select {
@@ -25,6 +30,30 @@ main {
   grid-column: 1;
 
   overflow-y: auto;
+
+  .package-item {
+    display: grid;
+    grid-template-columns: 55px auto 55px;
+    grid-template-rows: auto auto auto;
+
+    height: 50px;
+    margin: 5px;
+    overflow: hidden;
+
+    img {
+      grid-row: 1 / 3;
+      height: 50px;
+      width: 50px;
+    }
+
+    .version {
+      text-align: right;
+    }
+
+    &.selected {
+      // TODO style
+    }
+  }
 }
 
 .project-metadata-container {

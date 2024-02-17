@@ -30,13 +30,11 @@ const ProjectList = ({ selectedPackage, selectedVersion, projects }: ProjectList
     )
   }
 
-  const packageName = "**Package Name**"
-  const author = "**Author**"
   return (
     <>
       <div className="header">
-        <span className="package-name">{packageName}</span>
-        <span className="author">{` by ${author}`}</span>
+        <span className="package-name">{selectedPackage.id}</span>
+        <span className="author">{` by ${selectedPackage.authors}`}</span>
       </div>
 
       <div className="project-list">
