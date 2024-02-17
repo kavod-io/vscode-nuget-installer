@@ -38,17 +38,27 @@ const Search = ({
   const selectedValue = currentSource ? currentSource.name : ""
 
   return (
-    <div>
-      <input type="text" value={searchText} onChange={handleTextChange} />
-      <input type="checkbox" checked={includePrerelease} onChange={handlePrereleaseChange} />
-      <select value={selectedValue} onChange={handleSourceChanged}>
-        {sources.map((x) => (
-          <option key={x.name} value={x.name}>
-            {x.name}
-          </option>
-        ))}
-      </select>
-    </div>
+    <>
+      <div className="package-search">
+        <input type="text" value={searchText} onChange={handleTextChange} />
+        <input
+          type="checkbox"
+          id="include-prerelease"
+          checked={includePrerelease}
+          onChange={handlePrereleaseChange}
+        />
+        <label htmlFor="include-prerelease">Include Pre-release</label>
+      </div>
+      <div className="source-select">
+        <select value={selectedValue} onChange={handleSourceChanged}>
+          {sources.map((x) => (
+            <option key={x.name} value={x.name}>
+              {x.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   )
 }
 

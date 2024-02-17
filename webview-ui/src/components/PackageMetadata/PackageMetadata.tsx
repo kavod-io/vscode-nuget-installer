@@ -3,7 +3,7 @@ import React from "react"
 type PackageMetadataProps = {}
 
 const PackageMetadata = (props: PackageMetadataProps) => {
-  return <div>PackageMetadata</div>
+  return <div className="metadata-container">PackageMetadata</div>
 }
 
 export { PackageMetadata }
