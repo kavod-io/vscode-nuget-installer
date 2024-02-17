@@ -1,9 +1,33 @@
-import React from "react";
+import { ChangeEventHandler } from "react";
 
-type SearchProps = {};
+type SearchProps = {
+  includePrerelease: boolean;
+  updateIncludePrerelease: (newValue: boolean) => void;
 
-const Search = (props: SearchProps) => {
-  return <div>Search</div>;
+  searchText: string;
+  updateSearchText: (newValue: string) => void;
+};
+
+const Search = ({
+  includePrerelease,
+  updateIncludePrerelease,
+  searchText,
+  updateSearchText,
+}: SearchProps) => {
+  const handleTextChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    updateSearchText(e.target.value);
+  };
+
+  const handlePrereleaseChange: ChangeEventHandler<HTMLInputElement> = () => {
+    updateIncludePrerelease(!includePrerelease);
+  };
+
+  return (
+    <div>
+      <input type="text" value={searchText} onChange={handleTextChange} />
+      <input type="checkbox" checked={includePrerelease} onChange={handlePrereleaseChange} />
+    </div>
+  );
 };
 
 export { Search };
