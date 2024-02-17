@@ -22,11 +22,13 @@ export type Message = SetProjectsMessage | SetSourcesMessage
 export interface SetProjectsMessage {
   command: "setProjects"
   payload: Project[]
+  commandId: string
 }
 
 export interface SetSourcesMessage {
   command: "setSources"
   payload: PackageSource[]
+  commandId: string
 }
 
 // Need a class that can:
@@ -45,17 +47,19 @@ export interface ProjectPackage {
 }
 
 export type Command =
-  | ReloadProjectCommand
-  | ReloadSourcesCommand
+  | GetProjectCommand
+  | GetSourcesCommand
   | AddPackagesCommand
   | RemovePackagesCommand
 
-export interface ReloadProjectCommand {
-  command: "reloadProjects"
+export interface GetProjectCommand {
+  command: "getProjects"
+  commandId: string
 }
 
-export interface ReloadSourcesCommand {
-  command: "reloadSources"
+export interface GetSourcesCommand {
+  command: "getSources"
+  commandId: string
 }
 
 export interface AddPackagesCommand {
