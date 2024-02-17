@@ -10,8 +10,6 @@
 /build
 /dist
 
-/webview-ui
-
 # misc
 .DS_Store
 .env.local

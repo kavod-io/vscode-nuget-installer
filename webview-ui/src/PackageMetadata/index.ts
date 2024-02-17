@@ -1,1 +1,0 @@
-export { PackageMetadata } from "./PackageMetadata";
