@@ -12,11 +12,15 @@ type Callbacks<T> = {
   reject: (reason?: any) => void
 }
 
-const fetchSources = () => {
-  return createPromise<PackageSource[]>(sourcesCache)
-}
+const fetchSources = () => createPromise<PackageSource[]>(sourcesCache, "getSources")
 
-const createPromise = <T>(cache: Record<string, Callbacks<T>>): Promise<T> => {
+const fetchProjects = () => createPromise<Project[]>(projectsCache, "getProjects")
+
+const createPromise = <T>(
+  cache: Record<string, Callbacks<T>>,
+  command: "getSources" | "getProjects"
+): Promise<T> => {
+  console.log(cache)
   const commandId = `${commandCounter++}`
 
   const promise = new Promise<T>((res, rej) => {
@@ -35,7 +39,7 @@ const createPromise = <T>(cache: Record<string, Callbacks<T>>): Promise<T> => {
   })
 
   vscode.postMessage({
-    command: "getSources",
+    command,
     commandId
   })
 
@@ -68,4 +72,4 @@ if (!eventListenerAdded) {
   eventListenerAdded = true
 }
 
-export { fetchSources }
+export { fetchSources, fetchProjects }
