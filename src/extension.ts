@@ -1,14 +1,12 @@
-import * as vscode from 'vscode';
+import { commands, ExtensionContext } from "vscode";
+import { HelloWorldPanel } from "./panels/HelloWorldPanel";
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: ExtensionContext) {
+  // Create the show hello world command
+  const showHelloWorldCommand = commands.registerCommand("hello-world.showHelloWorld", () => {
+    HelloWorldPanel.render(context.extensionUri);
+  });
 
-	console.log('Congratulations, your extension "vscode-nuget-package-manager" is now active!');
-
-	let disposable = vscode.commands.registerCommand('vscode-nuget-package-manager.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from vscode-nuget-package-manager!');
-	});
-
-	context.subscriptions.push(disposable);
+  // Add command to the extension context
+  context.subscriptions.push(showHelloWorldCommand);
 }
-
-export function deactivate() {}

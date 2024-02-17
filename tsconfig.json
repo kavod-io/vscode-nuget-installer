@@ -1,15 +1,15 @@
 {
-	"compilerOptions": {
-		"module": "Node16",
-		"target": "ES2022",
-		"outDir": "out",
-		"lib": [
-			"ES2022"
-		],
-		"sourceMap": true,
-		"rootDir": "src",
-		"strict": true,
-		"noFallthroughCasesInSwitch": true,
-		"noImplicitAny": true
-	}
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "outDir": "out",
+    "lib": ["es6", "dom"],
+    "sourceMap": true,
+    "rootDir": "src",
+	"skipLibCheck": true,
+    "strict": true,
+	"noFallthroughCasesInSwitch": true,
+	"noImplicitAny": true
+  },
+  "exclude": ["node_modules", ".vscode-test", "webview-ui"]
 }
