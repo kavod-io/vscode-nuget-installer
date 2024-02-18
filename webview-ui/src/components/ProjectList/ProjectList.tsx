@@ -8,41 +8,58 @@ type ProjectListProps = {
 }
 
 const ProjectList = ({ selectedPackage, selectedVersion, projects }: ProjectListProps) => {
-  if (!selectedPackage) {
+  if (!selectedPackage || !selectedVersion) {
     return null
   }
 
-  const ProjectItem = ({ project: { projectName, packages } }: { project: Project }) => {
-    const installed = packages.some(
-      (p) => p.id === selectedPackage.id && p.version === selectedVersion
-    ) ? (
-      <a>Uninstall</a>
-    ) : (
-      <a>Install</a>
-    )
+  return (
+    <div className="project-list">
+      {projects.map((p) => (
+        <ProjectItem
+          project={p}
+          key={p.projectName}
+          selectedPackage={selectedPackage}
+          selectedVersion={selectedVersion}
+        />
+      ))}
+    </div>
+  )
+}
 
-    return (
-      <div className="project-item">
-        <input type="checkbox" />
-        <span>{projectName}</span>
-        <span>{installed}</span>
-      </div>
+type ProjectItemProps = {
+  project: Project
+  selectedPackage: PackageInfo
+  selectedVersion: string
+}
+
+const ProjectItem = ({
+  selectedPackage,
+  selectedVersion,
+  project: { packages, projectName }
+}: ProjectItemProps) => {
+  const installedPackage = packages.find((p) => p.id === selectedPackage.id)
+  const versionBadge = installedPackage ? (
+    <span className="version-badge">{installedPackage?.version}</span>
+  ) : null
+
+  const installed =
+    installedPackage && installedPackage.version === selectedVersion ? (
+      <a>
+        <u>Uninstall</u>
+      </a>
+    ) : (
+      <a>
+        <u>Install</u>
+      </a>
     )
-  }
 
   return (
-    <>
-      <div className="header">
-        <span className="package-name">{selectedPackage.id}</span>
-        <span className="author">{` by ${selectedPackage.authors}`}</span>
-      </div>
-
-      <div className="project-list">
-        {projects.map((p) => (
-          <ProjectItem project={p} key={p.projectName} />
-        ))}
-      </div>
-    </>
+    <div className="project-item">
+      <input type="checkbox" />
+      <span>{projectName}</span>
+      {versionBadge}
+      <span>{installed}</span>
+    </div>
   )
 }
 

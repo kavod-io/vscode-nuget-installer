@@ -19,7 +19,7 @@ const PackageItem = ({ nuget, selectedPackage, updateSelectedPackage }: PackageI
     <div className={classNames} onClick={handleClick}>
       <img src={nuget.iconUrl} />
       <div className="header">
-        <span>{nuget.id}</span>
+        <span className="title">{nuget.id}</span>
         <span> by {nuget.authors}</span>
       </div>
       <div className="version">

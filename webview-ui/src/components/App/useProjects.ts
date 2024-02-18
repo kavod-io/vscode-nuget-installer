@@ -4,6 +4,7 @@ import { fetchProjects } from "../../clients/extension"
 
 const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([])
+  const [selectedProjects, setSelectedProjects] = useState<Project[]>([])
 
   useEffect(() => {
     const initializeSources = async () => {
@@ -13,8 +14,14 @@ const useProjects = () => {
     initializeSources()
   }, [])
 
+  const updateSelectedProjects = (updatedProjects: Project[]) => {
+    setSelectedProjects(updatedProjects)
+  }
+
   return {
-    projects
+    projects,
+    selectedProjects,
+    updateSelectedProjects
   }
 }
 
