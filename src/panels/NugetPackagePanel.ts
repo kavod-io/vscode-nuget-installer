@@ -1,6 +1,9 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode"
-import { getUri } from "../utilities/getUri"
+import { Disposable, Uri, ViewColumn, Webview, WebviewPanel, tasks, window } from "vscode"
+import { Command, Message } from "../contracts"
 import { getNonce } from "../utilities/getNonce"
+import { getSources } from "../utilities/getSources"
+import { getUri } from "../utilities/getUri"
+import { addPackage, loadProjects, removePackage } from "../utilities/projectUtils"
 
 export class NugetPackagePanel {
   public static currentPanel: NugetPackagePanel | undefined
@@ -93,7 +96,7 @@ export class NugetPackagePanel {
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';connect-src *; img-src *;">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <title>Hello World</title>
         </head>
@@ -114,21 +117,51 @@ export class NugetPackagePanel {
    */
   private _setWebviewMessageListener(webview: Webview) {
     webview.onDidReceiveMessage(
-      (message: any) => {
-        const command = message.command
-        const text = message.text
+      async (command: Command) => {
+        switch (command.command) {
+          case "getProjects":
+            // TODO load projects from multiple providers.
+            const projects = await loadProjects()
+            postMessage(webview, {
+              command: "setProjects",
+              commandId: command.commandId,
+              payload: projects.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0)),
+            })
+            break
 
-        switch (command) {
-          case "hello":
-            // Code that should run in response to the hello message command
-            window.showInformationMessage(text)
-            return
-          // Add more switch case statements here as more webview message commands
-          // are created within the webview context (i.e. inside media/main.js)
+          case "getSources":
+            const payload = await getSources()
+            postMessage(webview, {
+              command: "setSources",
+              commandId: command.commandId,
+              payload,
+            })
+            break
+
+          case "add": {
+            const addTasks = addPackage(command)
+            await Promise.all(addTasks.map((t) => tasks.executeTask(t)))
+            // TODO either return a result from here for the frontend to pull projects or trigger the setProjects message
+            break
+          }
+
+          case "remove": {
+            const removeTasks = removePackage(command)
+            await Promise.all(removeTasks.map((t) => tasks.executeTask(t)))
+            // TODO either return a result from here for the frontend to pull projects or trigger the setProjects message
+            break
+          }
+
+          default:
+            break
         }
       },
       undefined,
       this._disposables
     )
   }
+}
+
+const postMessage = (panel: Webview, message: Message) => {
+  panel.postMessage(message)
 }

@@ -11,9 +11,64 @@
     "commands": [
       {
         "command": "vscode-nuget-package-manager.showGui",
-        "title": "Nuget Package Manager: Show"
+        "title": "Manage Nuget Packages"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .vbproj || resourceExtname == .fsproj || resourceExtname == .sln",
+          "command": "vscode-nuget-package-manager.showGui",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "NuGet Package Manager",
+      "properties": {
+        "NuGetPackageManager.credentialProviderFolder": {
+          "type": "string",
+          "default": "%UserProfile%/.nuget/plugins/netfx/CredentialProvider.Microsoft",
+          "description": "Folder path containing CredentialProvider.Microsoft.exe"
+        },
+        "NuGetPackageManager.sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "required": true,
+                "type": "string",
+                "description": "A user-defined name for this Nuget source."
+              },
+              "url": {
+                "required": true,
+                "type": "string",
+                "description": "The address to the service index for the given Nuget source."
+              },
+              "requiresAuth": {
+                "required": false,
+                "type": "boolean",
+                "description": "Whether this Nuget source requires authentication.  Currently only supports Basic auth by accessing credentials from Windows Credential Manager"
+              }
+            }
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "default": [
+            {
+              "name": "nuget.org",
+              "url": "https://api.nuget.org/v3/index.json"
+            },
+            {
+              "name": "Other",
+              "url": "TODO"
+            }
+          ],
+          "description": "NuGet sources"
+        }
+      }
+    }
   },
   "scripts": {
     "install:all": "npm install && cd webview-ui && npm install",
@@ -25,6 +80,10 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.8.10",
+    "xpath": "^0.0.34"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",
