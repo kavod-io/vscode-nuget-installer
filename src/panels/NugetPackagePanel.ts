@@ -1,4 +1,4 @@
-import { Disposable, Uri, ViewColumn, Webview, WebviewPanel, tasks, window } from "vscode"
+import { Disposable, Uri, ViewColumn, Webview, WebviewPanel, window } from "vscode"
 import { Command, Message } from "../contracts"
 import { getNonce } from "../utilities/getNonce"
 import { getSources } from "../utilities/getSources"
@@ -143,8 +143,7 @@ export class NugetPackagePanel {
           }
 
           case "add": {
-            const addTasks = addPackage(command)
-            await Promise.all(addTasks.map((t) => tasks.executeTask(t)))
+            await addPackage(command)
             postMessage(webview, {
               command: "addCompleted",
               commandId,
@@ -153,8 +152,7 @@ export class NugetPackagePanel {
           }
 
           case "remove": {
-            const removeTasks = removePackage(command)
-            await Promise.all(removeTasks.map((t) => tasks.executeTask(t)))
+            await removePackage(command)
             postMessage(webview, {
               command: "removeCompleted",
               commandId,

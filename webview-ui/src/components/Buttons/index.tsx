@@ -5,7 +5,7 @@ type InstallButtonProps = {
   selectedProjects: Project[] | null
   selectedPackage: PackageInfo | null
   selectedVersion: string | null
-  install: () => void
+  install: (projects: Project[]) => void
 }
 
 const InstallButton = ({
@@ -14,16 +14,19 @@ const InstallButton = ({
   selectedVersion,
   install,
 }: InstallButtonProps) => {
-  const canInstall =
-    selectedProjects &&
-    selectedProjects.length > 0 &&
-    selectedProjects.every((p) => {
-      const version = p.packages.find((p) => p.id === selectedPackage?.id)?.version
-      return !version || (selectedVersion !== null && version !== selectedVersion)
-    })
+  if (!selectedProjects || !selectedPackage || !selectedVersion) {
+    return <button disabled>Install</button>
+  }
+
+  const projectsToInstallTo = selectedProjects.filter((p) => {
+    const existing = p.packages.find((p) => p.id === selectedPackage.id)
+    return !existing || existing.version !== selectedVersion
+  })
 
   return (
-    <button disabled={!canInstall} onClick={install}>
+    <button
+      disabled={projectsToInstallTo.length === 0}
+      onClick={() => install(projectsToInstallTo)}>
       Install
     </button>
   )
@@ -32,26 +35,27 @@ const InstallButton = ({
 type UninstallButtonProps = {
   selectedProjects: Project[] | null
   selectedPackage: PackageInfo | null
-  selectedVersion: string | null
-  uninstall: () => void
+  uninstall: (projects: Project[]) => void
 }
 
 const UninstallButton = ({
   selectedProjects,
   selectedPackage,
-  selectedVersion,
   uninstall,
 }: UninstallButtonProps) => {
-  const canUninstall =
-    selectedProjects &&
-    selectedProjects.length > 0 &&
-    selectedProjects.every((p) => {
-      const version = p.packages.find((p) => p.id === selectedPackage?.id)?.version
-      return version && version === selectedVersion
-    })
+  if (!selectedProjects || !selectedPackage) {
+    return <button disabled>Install</button>
+  }
+
+  const projectsToUninstall = selectedProjects.filter((p) => {
+    const existing = p.packages.find((p) => p.id === selectedPackage.id)
+    return existing
+  })
 
   return (
-    <button disabled={!canUninstall} onClick={uninstall}>
+    <button
+      disabled={projectsToUninstall.length === 0}
+      onClick={() => uninstall(projectsToUninstall)}>
       Uninstall
     </button>
   )

@@ -46,27 +46,45 @@ const addPackage = (message: AddPackagesCommand) => addOrRemovePackages(message)
 
 const removePackage = (message: RemovePackagesCommand) => addOrRemovePackages(message)
 
-const addOrRemovePackages = (message: AddPackagesCommand | RemovePackagesCommand) => {
-  const tasks: vscode.Task[] = []
+const addOrRemovePackages = async (message: AddPackagesCommand | RemovePackagesCommand) => {
   for (let i = 0; i < message.projects.length; i++) {
     const project = message.projects[i]
     const args = [message.command, project.path.replace(/\\/g, "/"), "package", message.packageId]
+
     if (message.command === "add") {
       args.push("-v")
       args.push(message.version)
       args.push("-s")
       args.push(message.source)
     }
+
     const task = new vscode.Task(
       { type: "dotnet", task: `dotnet ${message.command}` },
       vscode.TaskScope.Workspace,
-      "nuget-gallery",
+      "nuget-project-manager",
       "dotnet",
       new vscode.ShellExecution("dotnet", args)
     )
-    tasks.push(task)
+
+    await executeBuildTask(task)
   }
-  return tasks
+}
+
+/**
+ * Executes a given task and returns a Promise that resolves when the task has completed.
+ * See: https://stackoverflow.com/a/61703141/2301065
+ */
+const executeBuildTask = async (task: vscode.Task) => {
+  const execution = await vscode.tasks.executeTask(task)
+
+  return new Promise<void>((resolve) => {
+    const disposable = vscode.tasks.onDidEndTask((e) => {
+      if (e.execution === execution) {
+        disposable.dispose()
+        resolve()
+      }
+    })
+  })
 }
 
 export { addPackage, loadProjects, removePackage }

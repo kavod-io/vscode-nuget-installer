@@ -5,7 +5,7 @@ import { Project } from "../../contracts"
 
 const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([])
-  const [selectedProjects, setSelectedProjects] = useState<Project[]>([])
+  const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([])
 
   const refreshProjects = useCallback(async () => {
     const results = await fetchProjects()
@@ -16,22 +16,28 @@ const useProjects = () => {
     refreshProjects()
   }, [refreshProjects])
 
-  const updateSelectedProject = useCallback((projectToUpdate: Project) => {
-    setSelectedProjects((x) => {
-      const newValue = x.some((p) => p.projectName === projectToUpdate.projectName)
-        ? x.filter((p) => p.projectName !== projectToUpdate.projectName)
-        : [...x, projectToUpdate]
+  const updateSelectedProject = useCallback(
+    (projectToUpdate: Project) => {
+      setSelectedProjectIds((ids) => {
+        const newValue = ids.some((id) => id === projectToUpdate.projectName)
+          ? ids.filter((p) => p !== projectToUpdate.projectName)
+          : [
+              ...ids,
+              projects.find((p) => p.projectName === projectToUpdate.projectName)!.projectName,
+            ]
 
-      console.log({
-        message: "updating selected projects",
-        projectToUpdate,
-        oldValue: x,
-        newValue,
+        console.log({
+          message: "updating selected projects",
+          projectToUpdate,
+          oldValue: ids,
+          newValue,
+        })
+
+        return newValue
       })
-
-      return newValue
-    })
-  }, [])
+    },
+    [projects]
+  )
 
   const handleInstall = useCallback(
     async (source: string, projects: Project[], nuget: PackageInfo, version: string) => {
@@ -47,6 +53,10 @@ const useProjects = () => {
       await refreshProjects()
     },
     [refreshProjects]
+  )
+
+  const selectedProjects = projects.filter((p) =>
+    selectedProjectIds.some((sp) => sp === p.projectName)
   )
 
   return {

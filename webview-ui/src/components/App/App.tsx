@@ -49,10 +49,6 @@ function App() {
     [currentSource, installPackage, selectedPackage, selectedVersion]
   )
 
-  const handleInstallToAllProjects = useCallback(async () => {
-    await handleInstallToProjects(selectedProjects)
-  }, [handleInstallToProjects, selectedProjects])
-
   const handleUninstallToProjects = useCallback(
     async (projectsToUninstall: Project[]) => {
       if (!currentSource || !selectedPackage || !selectedVersion) {
@@ -62,10 +58,6 @@ function App() {
     },
     [currentSource, selectedPackage, selectedVersion, uninstallPackage]
   )
-
-  const handleUninstallToAllProjects = useCallback(async () => {
-    await handleUninstallToProjects(selectedProjects)
-  }, [handleUninstallToProjects, selectedProjects])
 
   return (
     <main>
@@ -110,13 +102,12 @@ function App() {
             selectedProjects={selectedProjects}
             selectedPackage={selectedPackage}
             selectedVersion={selectedVersion}
-            install={handleInstallToAllProjects}
+            install={handleInstallToProjects}
           />
           <UninstallButton
             selectedProjects={selectedProjects}
             selectedPackage={selectedPackage}
-            selectedVersion={selectedVersion}
-            uninstall={handleUninstallToAllProjects}
+            uninstall={handleUninstallToProjects}
           />
         </div>
 
