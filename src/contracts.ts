@@ -64,6 +64,7 @@ export interface GetSourcesCommand {
 
 export interface AddPackagesCommand {
   command: "add"
+  commandId: string
   source: string
   projects: Project[]
   packageId: string
@@ -72,6 +73,7 @@ export interface AddPackagesCommand {
 
 export interface RemovePackagesCommand {
   command: "remove"
+  commandId: string
   projects: Project[]
   packageId: string
 }

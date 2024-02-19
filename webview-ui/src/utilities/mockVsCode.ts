@@ -24,17 +24,17 @@ const dispatchSetSourcesEvent = (commandId: string) => {
       {
         name: "Nuget.org",
         url: "https://api.nuget.org/v3/index.json",
-        credentials: null
+        credentials: null,
       },
       {
         name: "Other",
         url: "TODO",
         credentials: {
           username: "",
-          password: ""
-        }
-      }
-    ]
+          password: "",
+        },
+      },
+    ],
   })
 }
 
@@ -44,26 +44,26 @@ const dispatchSetProjectsEvent = (commandId: string) => {
     commandId,
     payload: [
       {
-        projectName: "My Project",
+        projectName: "My Project1",
         path: "c:/users/loser",
-        packages: []
+        packages: [],
       },
       {
-        projectName: "My Project",
+        projectName: "My Project2",
         path: "c:/users/loser",
-        packages: []
+        packages: [],
       },
       {
-        projectName: "My Project",
+        projectName: "My Project3",
         path: "c:/users/loser",
-        packages: []
+        packages: [],
       },
       {
-        projectName: "My Project",
+        projectName: "My Project4",
         path: "c:/users/loser",
-        packages: []
-      }
-    ]
+        packages: [],
+      },
+    ],
   })
 }
 

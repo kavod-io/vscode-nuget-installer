@@ -1,15 +1,35 @@
+import { FC } from "react"
 import { PackageInfo } from "../../clients/nuget"
 import { Project } from "../../contracts"
+import { ProjectItem } from "./ProjectItem"
 
-type ProjectListProps = {
+interface ProjectListProps {
   projects: Project[]
+  selectedProjects: Project[]
+  updateSelectedProjects: (projectToUpdate: Project, select: boolean) => void
+
   selectedPackage: PackageInfo | null
   selectedVersion: string | null
+
+  install: (projects: Project[]) => Promise<void>
+  uninstall: (projects: Project[]) => Promise<void>
 }
 
-const ProjectList = ({ selectedPackage, selectedVersion, projects }: ProjectListProps) => {
+const ProjectList: FC<ProjectListProps> = ({
+  projects,
+  selectedProjects,
+  updateSelectedProjects,
+  selectedPackage,
+  selectedVersion,
+  install,
+  uninstall,
+}) => {
   if (!selectedPackage || !selectedVersion) {
     return null
+  }
+
+  const isSelected = (project: Project): boolean => {
+    return selectedProjects.some((p) => projectsEqual(p, project))
   }
 
   return (
@@ -17,50 +37,21 @@ const ProjectList = ({ selectedPackage, selectedVersion, projects }: ProjectList
       {projects.map((p) => (
         <ProjectItem
           project={p}
-          key={p.projectName}
           selectedPackage={selectedPackage}
           selectedVersion={selectedVersion}
+          isSelected={isSelected(p)}
+          updateSelectedProjects={updateSelectedProjects}
+          key={p.projectName}
+          install={install}
+          uninstall={uninstall}
         />
       ))}
     </div>
   )
 }
 
-type ProjectItemProps = {
-  project: Project
-  selectedPackage: PackageInfo
-  selectedVersion: string
-}
-
-const ProjectItem = ({
-  selectedPackage,
-  selectedVersion,
-  project: { packages, projectName }
-}: ProjectItemProps) => {
-  const installedPackage = packages.find((p) => p.id === selectedPackage.id)
-  const versionBadge = installedPackage ? (
-    <span className="version-badge">{installedPackage?.version}</span>
-  ) : null
-
-  const installed =
-    installedPackage && installedPackage.version === selectedVersion ? (
-      <a>
-        <u>Uninstall</u>
-      </a>
-    ) : (
-      <a>
-        <u>Install</u>
-      </a>
-    )
-
-  return (
-    <div className="project-item">
-      <input type="checkbox" />
-      <span>{projectName}</span>
-      {versionBadge}
-      <span>{installed}</span>
-    </div>
-  )
-}
+// TODO this may not be the best way to match projects going forward.
+export const projectsEqual = (project1: Project, project2: Project): boolean =>
+  project1.projectName === project2.projectName
 
 export { ProjectList }

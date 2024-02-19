@@ -1,27 +1,57 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { fetchProjects, installPackage, uninstallPackage } from "../../clients/extension"
+import { PackageInfo } from "../../clients/nuget"
 import { Project } from "../../contracts"
-import { fetchProjects } from "../../clients/extension"
 
 const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([])
   const [selectedProjects, setSelectedProjects] = useState<Project[]>([])
 
-  useEffect(() => {
-    const initializeSources = async () => {
-      const sources = await fetchProjects()
-      setProjects(sources)
-    }
-    initializeSources()
+  const refreshProjects = useCallback(async () => {
+    const projects = await fetchProjects()
+    setProjects(projects)
   }, [])
 
-  const updateSelectedProjects = (updatedProjects: Project[]) => {
-    setSelectedProjects(updatedProjects)
-  }
+  useEffect(() => {
+    refreshProjects()
+  }, [])
+
+  const updateSelectedProject = useCallback((projectToUpdate: Project) => {
+    setSelectedProjects((x) => {
+      const newValue = x.some((p) => p.projectName === projectToUpdate.projectName)
+        ? x.filter((p) => p.projectName !== projectToUpdate.projectName)
+        : [...x, projectToUpdate]
+
+      console.log({
+        message: "updating selected projectsS",
+        projectToUpdate,
+        oldValue: x,
+        newValue,
+      })
+
+      return newValue
+    })
+  }, [])
+
+  const handleInstall = useCallback(
+    async (source: string, projects: Project[], nuget: PackageInfo, version: string) => {
+      await installPackage(source, projects, nuget.id, version)
+      refreshProjects()
+    },
+    []
+  )
+
+  const handleUninstall = useCallback(async (projects: Project[], nuget: PackageInfo) => {
+    await uninstallPackage(projects, nuget.id)
+    refreshProjects()
+  }, [])
 
   return {
     projects,
     selectedProjects,
-    updateSelectedProjects
+    updateSelectedProject,
+    installPackage: handleInstall,
+    uninstallPackage: handleUninstall,
   }
 }
 

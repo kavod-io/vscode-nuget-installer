@@ -13,14 +13,16 @@ const loadProjects = async () => {
 }
 
 const parseProject = (projectPath: string): Project => {
-  let projectContent = fs.readFileSync(projectPath, "utf8")
-  let document = new DOMParser().parseFromString(projectContent)
-  let packagesReferences = xpath.select("//ItemGroup/PackageReference", document) as Node[]
-  let project = {
+  const projectContent = fs.readFileSync(projectPath, "utf8")
+  const document = new DOMParser().parseFromString(projectContent)
+  const packagesReferences = xpath.select("//ItemGroup/PackageReference", document) as Node[]
+  const project: Project = {
     path: projectPath,
     projectName: path.basename(projectPath),
-    packages: Array(),
+    packages: [],
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   packagesReferences.forEach((p: any) => {
     let version = p.attributes.getNamedItem("Version")
     if (version) {
@@ -31,7 +33,7 @@ const parseProject = (projectPath: string): Project => {
         version = "not specifed"
       }
     }
-    let projectPackage = {
+    const projectPackage = {
       id: p.attributes.getNamedItem("Include").value,
       version: version,
     }
@@ -47,15 +49,15 @@ const removePackage = (message: RemovePackagesCommand) => addOrRemovePackages(me
 const addOrRemovePackages = (message: AddPackagesCommand | RemovePackagesCommand) => {
   const tasks: vscode.Task[] = []
   for (let i = 0; i < message.projects.length; i++) {
-    let project = message.projects[i]
-    let args = [message.command, project.path.replace(/\\/g, "/"), "package", message.packageId]
+    const project = message.projects[i]
+    const args = [message.command, project.path.replace(/\\/g, "/"), "package", message.packageId]
     if (message.command === "add") {
       args.push("-v")
       args.push(message.version)
       args.push("-s")
       args.push(message.source)
     }
-    let task = new vscode.Task(
+    const task = new vscode.Task(
       { type: "dotnet", task: `dotnet ${message.command}` },
       vscode.TaskScope.Workspace,
       "nuget-gallery",

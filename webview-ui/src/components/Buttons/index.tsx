@@ -1,13 +1,19 @@
 import { PackageInfo } from "../../clients/nuget"
 import { Project } from "../../contracts"
 
-type ButtonProps = {
+type InstallButtonProps = {
   selectedProjects: Project[] | null
   selectedPackage: PackageInfo | null
   selectedVersion: string | null
+  install: () => void
 }
 
-const InstallButton = ({ selectedProjects, selectedPackage, selectedVersion }: ButtonProps) => {
+const InstallButton = ({
+  selectedProjects,
+  selectedPackage,
+  selectedVersion,
+  install,
+}: InstallButtonProps) => {
   const canInstall =
     selectedProjects &&
     selectedProjects.length > 0 &&
@@ -17,18 +23,25 @@ const InstallButton = ({ selectedProjects, selectedPackage, selectedVersion }: B
     })
 
   return (
-    <button
-      disabled={!canInstall}
-      onClick={() => {
-        //install(selectedProjects)
-      }}
-    >
+    <button disabled={!canInstall} onClick={install}>
       Install
     </button>
   )
 }
 
-const UninstallButton = ({ selectedProjects, selectedPackage, selectedVersion }: ButtonProps) => {
+type UninstallButtonProps = {
+  selectedProjects: Project[] | null
+  selectedPackage: PackageInfo | null
+  selectedVersion: string | null
+  uninstall: () => void
+}
+
+const UninstallButton = ({
+  selectedProjects,
+  selectedPackage,
+  selectedVersion,
+  uninstall,
+}: UninstallButtonProps) => {
   const canUninstall =
     selectedProjects &&
     selectedProjects.length > 0 &&
@@ -38,12 +51,7 @@ const UninstallButton = ({ selectedProjects, selectedPackage, selectedVersion }:
     })
 
   return (
-    <button
-      disabled={!canUninstall}
-      onClick={() => {
-        //uninstall(selectedProjects)
-      }}
-    >
+    <button disabled={!canUninstall} onClick={uninstall}>
       Uninstall
     </button>
   )

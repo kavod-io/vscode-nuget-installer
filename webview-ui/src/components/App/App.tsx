@@ -1,4 +1,6 @@
+import { useCallback } from "react"
 import { useNugetMetadata, useNugetService } from "../../clients/nuget"
+import { Project } from "../../contracts"
 import { InstallButton, UninstallButton } from "../Buttons"
 import { PackageList } from "../PackageList"
 import { PackageMetadata } from "../PackageMetadata"
@@ -17,13 +19,15 @@ function App() {
   const { includePrerelease, searchText, updateIncludePrerelease, updateSearchText } =
     useSearchState()
   const { sources, currentSource, updateCurrentSource } = useSourceState()
-  const { projects, selectedProjects } = useProjects()
+  const { projects, selectedProjects, updateSelectedProject, installPackage, uninstallPackage } =
+    useProjects()
   const { selectedPackage, selectedVersion, updateSelectedPackage, updateSelectedVersion } =
     useSelectedPackage()
+
   const {
     data: pagedPackages,
     status: packageStatus,
-    fetchNextPage: loadMorePackages
+    fetchNextPage: loadMorePackages,
   } = useNugetService(currentSource, searchText, includePrerelease)
 
   const packages =
@@ -34,6 +38,34 @@ function App() {
     selectedPackage?.id ?? null,
     selectedVersion
   )
+
+  const handleInstallToProjects = useCallback(
+    async (projectsToInstall: Project[]) => {
+      if (!currentSource || !selectedPackage || !selectedVersion) {
+        return
+      }
+      await installPackage(currentSource.url, projectsToInstall, selectedPackage, selectedVersion)
+    },
+    [currentSource, installPackage, selectedPackage, selectedVersion]
+  )
+
+  const handleInstallToAllProjects = useCallback(async () => {
+    await handleInstallToProjects(selectedProjects)
+  }, [handleInstallToProjects, selectedProjects])
+
+  const handleUninstallToProjects = useCallback(
+    async (projectsToUninstall: Project[]) => {
+      if (!currentSource || !selectedPackage || !selectedVersion) {
+        return
+      }
+      await uninstallPackage(projectsToUninstall, selectedPackage)
+    },
+    [currentSource, selectedPackage, selectedVersion, uninstallPackage]
+  )
+
+  const handleUninstallToAllProjects = useCallback(async () => {
+    await handleUninstallToProjects(selectedProjects)
+  }, [handleUninstallToProjects, selectedProjects])
 
   return (
     <main>
@@ -62,6 +94,10 @@ function App() {
           projects={projects}
           selectedPackage={selectedPackage}
           selectedVersion={selectedVersion}
+          selectedProjects={selectedProjects}
+          updateSelectedProjects={updateSelectedProject}
+          install={handleInstallToProjects}
+          uninstall={handleUninstallToProjects}
         />
 
         <div className="package-version-container">
@@ -74,11 +110,13 @@ function App() {
             selectedProjects={selectedProjects}
             selectedPackage={selectedPackage}
             selectedVersion={selectedVersion}
+            install={handleInstallToAllProjects}
           />
           <UninstallButton
             selectedProjects={selectedProjects}
             selectedPackage={selectedPackage}
             selectedVersion={selectedVersion}
+            uninstall={handleUninstallToAllProjects}
           />
         </div>
 
