@@ -118,37 +118,47 @@ export class NugetPackagePanel {
   private _setWebviewMessageListener(webview: Webview) {
     webview.onDidReceiveMessage(
       async (command: Command) => {
+        console.log({ message: "received command from frontend", command })
+        const { commandId } = command
         switch (command.command) {
-          case "getProjects":
+          case "getProjects": {
             // TODO load projects from multiple providers.
             const projects = await loadProjects()
             postMessage(webview, {
               command: "setProjects",
-              commandId: command.commandId,
+              commandId,
               payload: projects.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0)),
             })
             break
+          }
 
-          case "getSources":
+          case "getSources": {
             const payload = await getSources()
             postMessage(webview, {
               command: "setSources",
-              commandId: command.commandId,
+              commandId,
               payload,
             })
             break
+          }
 
           case "add": {
             const addTasks = addPackage(command)
             await Promise.all(addTasks.map((t) => tasks.executeTask(t)))
-            // TODO either return a result from here for the frontend to pull projects or trigger the setProjects message
+            postMessage(webview, {
+              command: "addCompleted",
+              commandId,
+            })
             break
           }
 
           case "remove": {
             const removeTasks = removePackage(command)
             await Promise.all(removeTasks.map((t) => tasks.executeTask(t)))
-            // TODO either return a result from here for the frontend to pull projects or trigger the setProjects message
+            postMessage(webview, {
+              command: "removeCompleted",
+              commandId,
+            })
             break
           }
 

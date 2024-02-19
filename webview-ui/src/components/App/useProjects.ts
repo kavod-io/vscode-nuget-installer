@@ -8,13 +8,13 @@ const useProjects = () => {
   const [selectedProjects, setSelectedProjects] = useState<Project[]>([])
 
   const refreshProjects = useCallback(async () => {
-    const projects = await fetchProjects()
-    setProjects(projects)
+    const results = await fetchProjects()
+    setProjects(results)
   }, [])
 
   useEffect(() => {
     refreshProjects()
-  }, [])
+  }, [refreshProjects])
 
   const updateSelectedProject = useCallback((projectToUpdate: Project) => {
     setSelectedProjects((x) => {
@@ -23,7 +23,7 @@ const useProjects = () => {
         : [...x, projectToUpdate]
 
       console.log({
-        message: "updating selected projectsS",
+        message: "updating selected projects",
         projectToUpdate,
         oldValue: x,
         newValue,
@@ -36,15 +36,18 @@ const useProjects = () => {
   const handleInstall = useCallback(
     async (source: string, projects: Project[], nuget: PackageInfo, version: string) => {
       await installPackage(source, projects, nuget.id, version)
-      refreshProjects()
+      await refreshProjects()
     },
-    []
+    [refreshProjects]
   )
 
-  const handleUninstall = useCallback(async (projects: Project[], nuget: PackageInfo) => {
-    await uninstallPackage(projects, nuget.id)
-    refreshProjects()
-  }, [])
+  const handleUninstall = useCallback(
+    async (projects: Project[], nuget: PackageInfo) => {
+      await uninstallPackage(projects, nuget.id)
+      await refreshProjects()
+    },
+    [refreshProjects]
+  )
 
   return {
     projects,

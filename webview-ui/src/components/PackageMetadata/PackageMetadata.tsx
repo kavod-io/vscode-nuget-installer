@@ -30,8 +30,6 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
     )
   }
 
-  console.log({ packageMetadata })
-
   const License = () => {
     const text =
       packageMetadata.license !== undefined && packageMetadata.license !== ""

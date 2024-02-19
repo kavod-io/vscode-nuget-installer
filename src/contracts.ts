@@ -17,7 +17,11 @@ export interface Credentials {
   password: string
 }
 
-export type Message = SetProjectsMessage | SetSourcesMessage
+export type Message =
+  | SetProjectsMessage
+  | SetSourcesMessage
+  | AddCompleteMessage
+  | RemoveCompleteMessage
 
 export interface SetProjectsMessage {
   command: "setProjects"
@@ -28,6 +32,16 @@ export interface SetProjectsMessage {
 export interface SetSourcesMessage {
   command: "setSources"
   payload: PackageSource[]
+  commandId: string
+}
+
+export interface AddCompleteMessage {
+  command: "addCompleted"
+  commandId: string
+}
+
+export interface RemoveCompleteMessage {
+  command: "removeCompleted"
   commandId: string
 }
 

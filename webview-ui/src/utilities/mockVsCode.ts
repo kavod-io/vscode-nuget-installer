@@ -1,4 +1,27 @@
-import { Command, Message } from "../contracts"
+import { AddPackagesCommand, Command, Message, Project, RemovePackagesCommand } from "../contracts"
+
+let projectData: Project[] = [
+  {
+    projectName: "My Project1",
+    path: "c:/users/loser",
+    packages: [],
+  },
+  {
+    projectName: "My Project2",
+    path: "c:/users/loser",
+    packages: [],
+  },
+  {
+    projectName: "My Project3",
+    path: "c:/users/loser",
+    packages: [],
+  },
+  {
+    projectName: "My Project4",
+    path: "c:/users/loser",
+    packages: [],
+  },
+]
 
 const mockPostMessage = (message: Command) => {
   console.log({ text: "mock VS Code API called", message })
@@ -9,6 +32,14 @@ const mockPostMessage = (message: Command) => {
 
     case "getProjects":
       dispatchSetProjectsEvent(message.commandId)
+      break
+
+    case "add":
+      handleAddPackage(message)
+      break
+
+    case "remove":
+      handleRemovePackage(message)
       break
 
     default:
@@ -42,29 +73,54 @@ const dispatchSetProjectsEvent = (commandId: string) => {
   dispatchCustomEvent({
     command: "setProjects",
     commandId,
-    payload: [
-      {
-        projectName: "My Project1",
-        path: "c:/users/loser",
-        packages: [],
-      },
-      {
-        projectName: "My Project2",
-        path: "c:/users/loser",
-        packages: [],
-      },
-      {
-        projectName: "My Project3",
-        path: "c:/users/loser",
-        packages: [],
-      },
-      {
-        projectName: "My Project4",
-        path: "c:/users/loser",
-        packages: [],
-      },
-    ],
+    payload: projectData,
   })
+}
+
+// Note: React will perform a shallow comparison of our projectData so we need to update it immutably
+const handleAddPackage = ({ projects, packageId, version, commandId }: AddPackagesCommand) => {
+  projectData = projectData.map((p) => {
+    if (projects.some((x) => x.projectName === p.projectName)) {
+      return {
+        ...p,
+        packages: [
+          ...p.packages,
+          {
+            id: packageId,
+            version: version,
+          },
+        ],
+      }
+    }
+    return p
+  })
+
+  setTimeout(() => {
+    dispatchCustomEvent({
+      command: "addCompleted",
+      commandId,
+    })
+  }, 1000)
+}
+
+// Note: React will perform a shallow comparison of our projectData so we need to update it immutably
+const handleRemovePackage = ({ projects, packageId, commandId }: RemovePackagesCommand) => {
+  projectData = projectData.map((p) => {
+    if (projects.some((x) => x.projectName === p.projectName)) {
+      return {
+        ...p,
+        packages: p.packages.filter((x) => x.id !== packageId),
+      }
+    }
+    return p
+  })
+
+  setTimeout(() => {
+    dispatchCustomEvent({
+      command: "removeCompleted",
+      commandId,
+    })
+  }, 1000)
 }
 
 const dispatchCustomEvent = (payload: Message) => {
