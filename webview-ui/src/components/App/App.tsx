@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { useNugetMetadata, useNugetService } from "../../clients/nuget"
 import { Project } from "../../contracts"
 import { InstallButton, UninstallButton } from "../Buttons"
@@ -21,8 +21,6 @@ function App() {
   const { sources, currentSource, updateCurrentSource } = useSourceState()
   const { projects, selectedProjects, updateSelectedProject, installPackage, uninstallPackage } =
     useProjects()
-  const { selectedPackage, selectedVersion, updateSelectedPackage, updateSelectedVersion } =
-    useSelectedPackage(currentSource)
 
   const {
     data: pagedPackages,
@@ -30,8 +28,14 @@ function App() {
     fetchNextPage: loadMorePackages,
   } = useNugetService(currentSource, searchText, includePrerelease)
 
-  const packages =
-    pagedPackages && packageStatus === "success" ? pagedPackages.pages.flatMap((x) => x) : []
+  const packages = useMemo(
+    () =>
+      pagedPackages && packageStatus === "success" ? pagedPackages.pages.flatMap((x) => x) : [],
+    [pagedPackages, packageStatus]
+  )
+
+  const { selectedPackage, selectedVersion, updateSelectedPackage, updateSelectedVersion } =
+    useSelectedPackage(packages)
 
   const { data: packageMetadata, status: statusPackageMetadata } = useNugetMetadata(
     currentSource,

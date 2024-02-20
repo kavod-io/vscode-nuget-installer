@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react"
 import { PackageInfo } from "../../clients/nuget"
-import { PackageSource } from "../../contracts"
 
-const useSelectedPackage = (currentSource: PackageSource | null) => {
+const useSelectedPackage = (packages: PackageInfo[]) => {
   const [selectedPackage, setSelectedPackage] = useState<PackageInfo | null>(null)
   const [selectedVersion, setSelectedVersion] = useState<string | null>(null)
 
   useEffect(() => {
     setSelectedPackage(null)
     setSelectedVersion(null)
-  }, [currentSource])
+  }, [packages])
 
   const updateSelectedPackage = useCallback((nuget: PackageInfo | null) => {
     const newSelectedVersion = nuget?.version ?? null
