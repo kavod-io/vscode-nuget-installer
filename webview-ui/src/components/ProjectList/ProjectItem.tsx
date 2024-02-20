@@ -25,24 +25,32 @@ const ProjectItem: FC<ProjectItemProps> = ({
 }) => {
   const { packages, projectName } = project
   const installedPackage = packages.find((p) => p.id === selectedPackage.id)
+
   const versionBadge = installedPackage ? (
-    <span className="version-badge">{installedPackage?.version}</span>
+    <span className="text-xs font-bold py-0 px-[2px] ml-1 bg-[var(--vscode-badge-background)] text-[var(--vscode-badge-foreground)]">
+      {installedPackage?.version}
+    </span>
   ) : null
 
   const installed =
     installedPackage && installedPackage.version === selectedVersion ? (
-      <a onClick={() => uninstall([project])}>
+      <a
+        className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+        onClick={() => uninstall([project])}>
         <u>Uninstall</u>
       </a>
     ) : (
-      <a onClick={() => install([project])}>
+      <a
+        className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+        onClick={() => install([project])}>
         <u>Install</u>
       </a>
     )
 
   return (
-    <div className="project-item">
+    <div className="mb-1">
       <input
+        className="p-1 border-[var(--vscode-input-border)] text-[var(--vscode-input-foreground)] bg-[var(--vscode-input-background)]"
         type="checkbox"
         checked={isSelected}
         onChange={() => updateSelectedProjects(project, !isSelected)}

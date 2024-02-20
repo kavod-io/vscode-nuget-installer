@@ -10,7 +10,7 @@ type PackageMetadataProps = {
 
 const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMetadataProps) => {
   if (statusPackageMetadata === "pending") {
-    return <Loader />
+    return <Loader className="flex items-center justify-center" />
   }
 
   if (statusPackageMetadata === "error") {
@@ -37,7 +37,11 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
         : "View license"
 
     return (
-      <a target="_blank" href={packageMetadata.licenseUrl}>
+      <a
+        className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+        target="_blank"
+        href={packageMetadata.licenseUrl}
+        rel="noreferrer">
         {text}
       </a>
     )
@@ -46,7 +50,11 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
   const Project = () => {
     if (packageMetadata.projectUrl !== undefined && packageMetadata.projectUrl !== "") {
       return (
-        <a target="_blank" href={packageMetadata.projectUrl}>
+        <a
+          className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+          target="_blank"
+          href={packageMetadata.projectUrl}
+          rel="noreferrer">
           {packageMetadata.projectUrl.slice(0, 85)}
         </a>
       )
@@ -93,7 +101,7 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
   }
 
   return (
-    <div id="metadata-container">
+    <div className="overflow-y-auto">
       <div className="package-description">
         <h2 className="title-description">Description</h2>
         <p>{packageMetadata.description}</p>
@@ -102,7 +110,10 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
             <tr>
               <td>Open in:</td>
               <td>
-                <a target="_blank" href="packageMetadata.nugetUrl">
+                <a
+                  className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+                  target="_blank"
+                  href="packageMetadata.nugetUrl">
                   nuget.org
                 </a>
               </td>

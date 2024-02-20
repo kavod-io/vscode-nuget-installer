@@ -64,7 +64,7 @@ function App() {
   )
 
   return (
-    <main>
+    <main className="h-full grid grid-cols-[6fr,4fr] grid-rows-[60px,auto]">
       <Search
         includePrerelease={includePrerelease}
         searchText={searchText}
@@ -83,7 +83,7 @@ function App() {
         updateSelectedPackage={updateSelectedPackage}
       />
 
-      <div className="project-metadata-container">
+      <div className="row-start-2 col-start-2">
         <ProjectHeader selectedPackage={selectedPackage} />
 
         <ProjectList

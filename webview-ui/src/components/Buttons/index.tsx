@@ -19,7 +19,13 @@ const InstallButton = ({
   }
 
   if (!selectedProjects) {
-    return <button disabled>Install</button>
+    return (
+      <button
+        className="bg-[var(--vscode-button-background)] text-[var(--vscode-button-foreground)] px-1 py-2 border-0 hover:cursor-pointer hover:bg-[var(--vscode-button-hoverBackground)] disabled:pointer-events-none disabled:bg-[var(--vscode-activityBar-background)] disabled:text-[var(--vscode-activityBar-inactiveForeground)]"
+        disabled>
+        Install
+      </button>
+    )
   }
 
   const projectsToInstallTo = selectedProjects.filter((p) => {
@@ -29,6 +35,7 @@ const InstallButton = ({
 
   return (
     <button
+      className="bg-[var(--vscode-button-background)] text-[var(--vscode-button-foreground)] px-1 py-2 border-0 hover:cursor-pointer hover:bg-[var(--vscode-button-hoverBackground)] disabled:pointer-events-none disabled:bg-[var(--vscode-activityBar-background)] disabled:text-[var(--vscode-activityBar-inactiveForeground)]"
       disabled={projectsToInstallTo.length === 0}
       onClick={() => install(projectsToInstallTo)}>
       Install
@@ -52,7 +59,13 @@ const UninstallButton = ({
   }
 
   if (!selectedProjects) {
-    return <button disabled>Install</button>
+    return (
+      <button
+        className="bg-[var(--vscode-button-background)] text-[var(--vscode-button-foreground)] px-1 py-2 border-0 hover:cursor-pointer hover:bg-[var(--vscode-button-hoverBackground)] disabled:pointer-events-none disabled:bg-[var(--vscode-activityBar-background)] disabled:text-[var(--vscode-activityBar-inactiveForeground)]"
+        disabled>
+        Install
+      </button>
+    )
   }
 
   const projectsToUninstall = selectedProjects.filter((p) => {
@@ -62,6 +75,7 @@ const UninstallButton = ({
 
   return (
     <button
+      className="bg-[var(--vscode-button-background)] text-[var(--vscode-button-foreground)] px-1 py-2 border-0 hover:cursor-pointer hover:bg-[var(--vscode-button-hoverBackground)] disabled:pointer-events-none disabled:bg-[var(--vscode-activityBar-background)] disabled:text-[var(--vscode-activityBar-inactiveForeground)]"
       disabled={projectsToUninstall.length === 0}
       onClick={() => uninstall(projectsToUninstall)}>
       Uninstall

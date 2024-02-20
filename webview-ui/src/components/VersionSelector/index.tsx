@@ -23,7 +23,7 @@ const VersionSelector = ({
 
   return (
     <select
-      className="package-version-selector"
+      className="p-1 text-[var(--vscode-dropdown-foreground)] bg-[var(--vscode-dropdown-background)]"
       onChange={(e) => updateSelectedVersion(e.target.value)}
       value={selectedVersion ?? ""}>
       {options}

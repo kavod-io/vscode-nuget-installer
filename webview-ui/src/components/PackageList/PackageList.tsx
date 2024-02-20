@@ -16,10 +16,10 @@ const PackageList = ({
   packageStatus,
   //loadMorePackages,
   selectedPackage,
-  updateSelectedPackage
+  updateSelectedPackage,
 }: PackageListProps) => {
   if (packageStatus === "pending") {
-    return <Loader />
+    return <Loader className="flex items-center justify-center" />
   }
 
   if (packageStatus === "error") {
@@ -46,7 +46,7 @@ const PackageList = ({
   ))
 
   return (
-    <div className="package-list">
+    <div className="col-start-1 row-start-2 overflow-y-auto">
       {packageItems}
       {/* TODO show load more button or item. */}
     </div>

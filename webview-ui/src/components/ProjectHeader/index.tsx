@@ -1,4 +1,3 @@
-import React from "react"
 import { PackageInfo } from "../../clients/nuget"
 
 type ProjectHeaderProps = {
@@ -11,8 +10,8 @@ const ProjectHeader = ({ selectedPackage }: ProjectHeaderProps) => {
   }
 
   return (
-    <div className="header">
-      <span className="package-name">{selectedPackage.id}</span>
+    <div className="w-full pb-2">
+      <span className="text-xl">{selectedPackage.id}</span>
       <span className="author">{` by ${selectedPackage.authors}`}</span>
     </div>
   )
