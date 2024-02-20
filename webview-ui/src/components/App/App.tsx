@@ -22,7 +22,7 @@ function App() {
   const { projects, selectedProjects, updateSelectedProject, installPackage, uninstallPackage } =
     useProjects()
   const { selectedPackage, selectedVersion, updateSelectedPackage, updateSelectedVersion } =
-    useSelectedPackage()
+    useSelectedPackage(currentSource)
 
   const {
     data: pagedPackages,
