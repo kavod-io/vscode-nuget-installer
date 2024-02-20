@@ -7,15 +7,14 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:react/jsx-runtime",
     "prettier"
   ],
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/naming-convention": "warn",
     "typescript-eslint/no-unused-vars": "off",
     "curly": "warn",
     "eqeqeq": "warn",
