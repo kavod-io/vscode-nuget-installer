@@ -145,6 +145,15 @@ main {
 
     .project-item {
       margin-bottom: 4px;
+
+      .version-badge {
+        font-size: 12px;
+        font-weight: bold;
+        padding: 0px 2px;
+        margin-left: 4px;
+        background: var(--vscode-badge-background);
+        color: var(--vscode-badge-foreground);
+      }
     }
   }
 
