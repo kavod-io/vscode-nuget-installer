@@ -14,7 +14,11 @@ const InstallButton = ({
   selectedVersion,
   install,
 }: InstallButtonProps) => {
-  if (!selectedProjects || !selectedPackage || !selectedVersion) {
+  if (!selectedPackage || !selectedVersion) {
+    return null
+  }
+
+  if (!selectedProjects) {
     return <button disabled>Install</button>
   }
 
@@ -43,7 +47,11 @@ const UninstallButton = ({
   selectedPackage,
   uninstall,
 }: UninstallButtonProps) => {
-  if (!selectedProjects || !selectedPackage) {
+  if (!selectedPackage) {
+    return null
+  }
+
+  if (!selectedProjects) {
     return <button disabled>Install</button>
   }
 

@@ -9,10 +9,10 @@ type VersionSelectorProps = {
 const VersionSelector = ({
   selectedPackage,
   selectedVersion,
-  updateSelectedVersion
+  updateSelectedVersion,
 }: VersionSelectorProps) => {
   if (!selectedPackage) {
-    return <select className="package-version-selector" disabled />
+    return null
   }
 
   const options = selectedPackage.versions.reverse().map((v) => (
@@ -25,8 +25,7 @@ const VersionSelector = ({
     <select
       className="package-version-selector"
       onChange={(e) => updateSelectedVersion(e.target.value)}
-      value={selectedVersion ?? ""}
-    >
+      value={selectedVersion ?? ""}>
       {options}
     </select>
   )
