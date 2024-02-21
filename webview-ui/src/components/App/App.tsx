@@ -64,7 +64,7 @@ function App() {
   )
 
   return (
-    <main className="h-full grid grid-cols-[6fr,4fr] grid-rows-[60px,auto]">
+    <main className="h-dvh grid gap-x-2 grid-cols-[60%,40%] grid-rows-[50px,auto]">
       <Search
         includePrerelease={includePrerelease}
         searchText={searchText}
@@ -83,20 +83,24 @@ function App() {
         updateSelectedPackage={updateSelectedPackage}
       />
 
-      <div className="row-start-2 col-start-2">
-        <ProjectHeader selectedPackage={selectedPackage} />
+      <div className="row-start-2 col-start-2 flex flex-col gap-3 max-h-full">
+        <div className="w-full flex-none">
+          <ProjectHeader selectedPackage={selectedPackage} />
+        </div>
 
-        <ProjectList
-          projects={projects}
-          selectedPackage={selectedPackage}
-          selectedVersion={selectedVersion}
-          selectedProjects={selectedProjects}
-          updateSelectedProjects={updateSelectedProject}
-          install={handleInstallToProjects}
-          uninstall={handleUninstallToProjects}
-        />
+        <div className="w-full flex-none max-h-[150px]">
+          <ProjectList
+            projects={projects}
+            selectedPackage={selectedPackage}
+            selectedVersion={selectedVersion}
+            selectedProjects={selectedProjects}
+            updateSelectedProjects={updateSelectedProject}
+            install={handleInstallToProjects}
+            uninstall={handleUninstallToProjects}
+          />
+        </div>
 
-        <div className="package-version-container">
+        <div className="w-full flex-none flex gap-3">
           <VersionSelector
             selectedPackage={selectedPackage}
             selectedVersion={selectedVersion}
@@ -115,10 +119,12 @@ function App() {
           />
         </div>
 
-        <PackageMetadata
-          packageMetadata={packageMetadata?.catalogEntry ?? null}
-          statusPackageMetadata={statusPackageMetadata}
-        />
+        <div className="w-full flex-1 basis-1 overflow-y-auto">
+          <PackageMetadata
+            packageMetadata={packageMetadata?.catalogEntry ?? null}
+            statusPackageMetadata={statusPackageMetadata}
+          />
+        </div>
       </div>
     </main>
   )

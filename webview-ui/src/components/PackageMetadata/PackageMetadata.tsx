@@ -38,7 +38,7 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
 
     return (
       <a
-        className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+        className="m-0 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
         target="_blank"
         href={packageMetadata.licenseUrl}
         rel="noreferrer">
@@ -51,7 +51,7 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
     if (packageMetadata.projectUrl !== undefined && packageMetadata.projectUrl !== "") {
       return (
         <a
-          className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+          className="m-0 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
           target="_blank"
           href={packageMetadata.projectUrl}
           rel="noreferrer">
@@ -101,58 +101,61 @@ const PackageMetadata = ({ statusPackageMetadata, packageMetadata }: PackageMeta
   }
 
   return (
-    <div className="overflow-y-auto">
-      <div className="package-description">
-        <h2 className="title-description">Description</h2>
-        <p>{packageMetadata.description}</p>
-        <table className="table">
-          <tbody>
-            <tr>
-              <td>Open in:</td>
-              <td>
-                <a
-                  className="m-1 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
-                  target="_blank"
-                  href="packageMetadata.nugetUrl">
-                  nuget.org
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>Version:</td>
-              <td>{packageMetadata.version}</td>
-            </tr>
-            <tr>
-              <td>Date Published:</td>
-              <td>{packageMetadata.datePublished}</td>
-            </tr>
-            <tr>
-              <td>Author(s):</td>
-              <td>{packageMetadata.authors}</td>
-            </tr>
-            <tr>
-              <td>License:</td>
-              <td>
-                <License />
-              </td>
-            </tr>
-            <tr>
-              <td>Project Url:</td>
-              <td>
-                <Project />
-              </td>
-            </tr>
-            <tr>
-              <td>Tags:</td>
-              <td>{packageMetadata.tags}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h2 className="title-description">Dependencies</h2>
-        <Dependencies />
-      </div>
-    </div>
+    <>
+      <h2 className="mt-0">Description</h2>
+      <p>{packageMetadata.description}</p>
+      <table className="table">
+        <tbody>
+          <tr>
+            <td>Open in:</td>
+            <td>
+              <a
+                className="m-0 text-[var(--vscode-editorLink-activeForeground)] hover:bg-[var(--vscode-editor-hoverHighlightBackground)] hover:cursor-pointer"
+                target="_blank"
+                href="packageMetadata.nugetUrl">
+                nuget.org
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>Version:</td>
+            <td>{packageMetadata.version}</td>
+          </tr>
+          <tr>
+            <td>Date Published:</td>
+            <td>{packageMetadata.datePublished}</td>
+          </tr>
+          <tr>
+            <td>Author(s):</td>
+            <td>{packageMetadata.authors}</td>
+          </tr>
+          <tr>
+            <td>License:</td>
+            <td>
+              <License />
+            </td>
+          </tr>
+          <tr>
+            <td>Project Url:</td>
+            <td>
+              <Project />
+            </td>
+          </tr>
+          <tr>
+            <td className="align-top">Tags:</td>
+            <td>
+              <ul className="list-none p-0 m-0">
+                {packageMetadata.tags.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2 className="title-description">Dependencies</h2>
+      <Dependencies />
+    </>
   )
 }
 

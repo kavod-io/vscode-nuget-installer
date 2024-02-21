@@ -33,7 +33,7 @@ const ProjectList: FC<ProjectListProps> = ({
   }
 
   return (
-    <div className="pb-2 border-solid border-x-0 border-y-[1px] border-y-[var(--vscode-sideBar-border)]">
+    <div className="border-solid border-x-0 border-y-[1px] border-y-[var(--vscode-sideBar-border)]">
       {projects.map((p) => (
         <ProjectItem
           project={p}

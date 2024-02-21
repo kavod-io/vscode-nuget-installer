@@ -10,10 +10,10 @@ const ProjectHeader = ({ selectedPackage }: ProjectHeaderProps) => {
   }
 
   return (
-    <div className="w-full pb-2">
+    <>
       <span className="text-xl">{selectedPackage.id}</span>
       <span className="author">{` by ${selectedPackage.authors}`}</span>
-    </div>
+    </>
   )
 }
 
