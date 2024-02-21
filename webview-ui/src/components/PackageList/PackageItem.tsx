@@ -22,7 +22,7 @@ const PackageItem = ({ nuget, selectedPackage, updateSelectedPackage }: PackageI
 
   return (
     <div
-      className={`grid grid-cols-[60px,auto,60px] grid-rows-[20px,auto] gap-x-1 h-14 my-1 overflow-hidden hover:cursor-pointer hover:bg-[var(--vscode-list-hoverBackground)] hover:text-[var(--vscode-list-hoverForeground)] ${classNames}`}
+      className={`grid grid-cols-[60px,auto,60px] grid-rows-[20px,auto] gap-x-1 h-14 my-1 p-2 overflow-hidden hover:cursor-pointer hover:bg-[var(--vscode-list-hoverBackground)] hover:text-[var(--vscode-list-hoverForeground)] ${classNames}`}
       onClick={handleClick}>
       <img className="row-start-1 row-end-3 h-14 w-14" src={nuget.iconUrl ?? defaultIconUrl} />
 
@@ -36,7 +36,7 @@ const PackageItem = ({ nuget, selectedPackage, updateSelectedPackage }: PackageI
       <div className="col-start-3 mr-1 text-right overflow-hidden overflow-ellipsis">
         <span>{nuget.version}</span>
       </div>
-      <div className="overflow-ellipsis">{nuget.description}</div>
+      <div className="line-clamp-2">{nuget.description}</div>
     </div>
   )
 }
