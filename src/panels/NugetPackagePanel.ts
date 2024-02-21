@@ -28,6 +28,8 @@ export class NugetPackagePanel {
 
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview)
+
+    panel.iconPath = Uri.joinPath(extensionUri, "src", "resources", "favicon-32x32.png")
   }
 
   /**
@@ -98,7 +100,7 @@ export class NugetPackagePanel {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';connect-src *; img-src *;">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
-          <title>Hello World</title>
+          <title>Nuget Package Manager</title>
         </head>
         <body>
           <div id="root"></div>
