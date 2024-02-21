@@ -26,6 +26,7 @@ function App() {
     data: pagedPackages,
     status: packageStatus,
     fetchNextPage: loadMorePackages,
+    isFetching,
   } = useNugetService(currentSource, searchText, includePrerelease)
 
   const packages = useMemo(
@@ -81,6 +82,7 @@ function App() {
         loadMorePackages={loadMorePackages}
         selectedPackage={selectedPackage}
         updateSelectedPackage={updateSelectedPackage}
+        isFetching={isFetching}
       />
 
       <div className="row-start-2 col-start-2 flex flex-col gap-3 max-h-full">

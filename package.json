@@ -83,6 +83,7 @@
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.8.10",
+    "react-intersection-observer": "^9.8.0",
     "xpath": "^0.0.34"
   },
   "devDependencies": {

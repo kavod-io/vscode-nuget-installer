@@ -1,6 +1,7 @@
 import Loader from "../../Loader"
 import { PackageInfo } from "../../clients/nuget"
 import { Status } from "../../types"
+import { LoadMore } from "./LoadMore"
 import { PackageItem } from "./PackageItem"
 
 type PackageListProps = {
@@ -9,14 +10,16 @@ type PackageListProps = {
   loadMorePackages: () => void
   selectedPackage: PackageInfo | null
   updateSelectedPackage: (info: PackageInfo | null) => void
+  isFetching: boolean
 }
 
 const PackageList = ({
   packages,
   packageStatus,
-  //loadMorePackages,
+  loadMorePackages,
   selectedPackage,
   updateSelectedPackage,
+  isFetching,
 }: PackageListProps) => {
   if (packageStatus === "pending") {
     return <Loader className="flex items-center justify-center" />
@@ -34,8 +37,6 @@ const PackageList = ({
     return <h3>No packages found</h3>
   }
 
-  // TODO handle other states
-
   const packageItems = packages.map((p) => (
     <PackageItem
       nuget={p}
@@ -48,7 +49,7 @@ const PackageList = ({
   return (
     <div className="col-start-1 row-start-2 overflow-y-auto">
       {packageItems}
-      {/* TODO show load more button or item. */}
+      <LoadMore fetchNextPage={loadMorePackages} isFetching={isFetching} />
     </div>
   )
 }
