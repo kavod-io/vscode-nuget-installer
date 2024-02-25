@@ -1,0 +1,104 @@
+{
+  "name": "vscode-nuget-package-manager",
+  "displayName": "VS Code Nuget Package Manager",
+  "description": "GUI to install nuget packages",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-nuget-package-manager.showGui",
+        "title": "Manage Nuget Packages"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .csproj || resourceExtname == .vbproj || resourceExtname == .fsproj || resourceExtname == .sln",
+          "command": "vscode-nuget-package-manager.showGui",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "NuGet Package Manager",
+      "properties": {
+        "NuGetPackageManager.credentialProviderFolder": {
+          "type": "string",
+          "default": "%UserProfile%/.nuget/plugins/netfx/CredentialProvider.Microsoft",
+          "description": "Folder path containing CredentialProvider.Microsoft.exe"
+        },
+        "NuGetPackageManager.sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "required": true,
+                "type": "string",
+                "description": "A user-defined name for this Nuget source."
+              },
+              "url": {
+                "required": true,
+                "type": "string",
+                "description": "The address to the service index for the given Nuget source."
+              },
+              "requiresAuth": {
+                "required": false,
+                "type": "boolean",
+                "description": "Whether this Nuget source requires authentication.  Currently only supports Basic auth by accessing credentials from Windows Credential Manager"
+              }
+            }
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "default": [
+            {
+              "name": "nuget.org",
+              "url": "https://api.nuget.org/v3/index.json"
+            },
+            {
+              "name": "Other",
+              "url": "TODO"
+            }
+          ],
+          "description": "NuGet sources"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "install:all": "npm install && cd webview-ui && npm install",
+    "start:webview": "cd webview-ui && npm run start",
+    "build:webview": "cd webview-ui && npm run build",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts,tsx",
+    "test": "vscode-test"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.8.10",
+    "react-intersection-observer": "^9.8.0",
+    "xpath": "^0.0.34"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.75.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "glob": "^7.1.6",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3",
+    "vscode-test": "^1.5.0"
+  }
+}
