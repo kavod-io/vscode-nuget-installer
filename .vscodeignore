@@ -3,6 +3,8 @@
 
 # Ignore extension configs
 .vscode/**
+.github/
+node_modules/
 
 # Ignore test files
 .vscode-test/**
@@ -20,6 +22,7 @@ webview-ui/README.md
 webview-ui/package.json
 webview-ui/package-lock.json
 webview-ui/node_modules/**
+webview-ui/**/*.config.js
 
 # Ignore Misc
 .yarnrc
@@ -30,3 +33,5 @@ vsc-extension-quickstart.md
 **/.eslintrc.json
 **/*.map
 **/*.ts
+**/.prettierignore
+**/.vscode-test.mjs

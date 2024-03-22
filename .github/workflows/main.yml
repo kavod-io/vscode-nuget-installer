@@ -1,0 +1,93 @@
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Whether the extension should be published to the extension registries.
+        type: boolean
+        default: false
+      version:
+        description: The SemVer version for this Build
+        required: true
+        default: "0.0.0"
+        type: string
+      preRelease:
+        description: Whether the extension is a pre-release version or not.
+        required: true
+        type: boolean
+        default: true
+
+name: Build and deploy extension
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      vsixPath: ${{ steps.packageExtension.outputs.vsixPath }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update Version
+        run: |
+          npm config set git-tag-version false
+          npm version ${{ github.event.inputs.version }}
+
+      - name: Install dependencies
+        run: npm ci && cd webview-ui && npm ci
+
+      - name: Build Webview
+        run: cd webview-ui && npm run build
+
+      - name: Package Extension
+        id: packageExtension
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: stub
+          dryRun: true
+
+      - name: Upload Extension Package as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: vsix
+          path: ${{ steps.packageExtension.outputs.vsixPath }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.publish == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update Version
+        run: |
+          npm config set git-tag-version false
+          npm version ${{ github.event.inputs.version }}
+
+      - name: Install dependencies
+        run: npm ci && cd webview-ui && npm ci
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: vsix
+
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          extensionFile: ${{ needs.build-lint-test.outputs.vsixPath }}
+          registryUrl: https://marketplace.visualstudio.com
+          preRelease: ${{ github.event.inputs.preRelease }}
+
+      - name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+          extensionFile: ${{ needs.build-lint-test.outputs.vsixPath }}
+          preRelease: ${{ github.event.inputs.preRelease }}
