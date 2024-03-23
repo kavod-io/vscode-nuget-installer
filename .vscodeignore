@@ -4,7 +4,6 @@
 # Ignore extension configs
 .vscode/**
 .github/
-node_modules/
 
 # Ignore test files
 .vscode-test/**
@@ -21,7 +20,6 @@ webview-ui/index.html
 webview-ui/README.md
 webview-ui/package.json
 webview-ui/package-lock.json
-webview-ui/node_modules/**
 webview-ui/**/*.config.js
 
 # Ignore Misc
