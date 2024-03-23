@@ -1,12 +1,12 @@
 {
-  "name": "vscode-nuget-package-manager",
-  "displayName": "VS Code Nuget Package Manager",
+  "name": "vscode-nuget-installer",
+  "displayName": "VS Code Nuget Installer",
   "description": "GUI to install nuget packages",
   "version": "0.0.1",
   "publisher": "kavod-io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kavod-io/vscode-nuget-package-manager"
+    "url": "https://github.com/kavod-io/vscode-nuget-installer"
   },
   "engines": {
     "vscode": "^1.75.0"
@@ -15,7 +15,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-nuget-package-manager.showGui",
+        "command": "vscode-nuget-installer.showGui",
         "title": "Manage Nuget Packages"
       }
     ],
@@ -23,20 +23,20 @@
       "explorer/context": [
         {
           "when": "resourceExtname == .csproj || resourceExtname == .vbproj || resourceExtname == .fsproj || resourceExtname == .sln",
-          "command": "vscode-nuget-package-manager.showGui",
+          "command": "vscode-nuget-installer.showGui",
           "group": "navigation"
         }
       ]
     },
     "configuration": {
-      "title": "NuGet Package Manager",
+      "title": "NuGet Package Installer",
       "properties": {
-        "NuGetPackageManager.credentialProviderFolder": {
+        "NugetPackageInstaller.credentialProviderFolder": {
           "type": "string",
           "default": "%UserProfile%/.nuget/plugins/netfx/CredentialProvider.Microsoft",
           "description": "Folder path containing CredentialProvider.Microsoft.exe"
         },
-        "NuGetPackageManager.sources": {
+        "NugetPackageInstaller.sources": {
           "type": "array",
           "items": {
             "type": "object",

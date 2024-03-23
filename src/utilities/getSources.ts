@@ -13,7 +13,7 @@ interface NugetSourceExtensionSettings {
 }
 
 const getSources = async () => {
-  const configuration = vscode.workspace.getConfiguration("NuGetPackageManager")
+  const configuration = vscode.workspace.getConfiguration("NugetPackageInstaller")
 
   return await Promise.all(
     (configuration.sources as NugetSourceExtensionSettings[]).map(

@@ -61,7 +61,7 @@ const addOrRemovePackages = async (message: AddPackagesCommand | RemovePackagesC
     const task = new vscode.Task(
       { type: "dotnet", task: `dotnet ${message.command}` },
       vscode.TaskScope.Workspace,
-      "nuget-project-manager",
+      "nuget-project-installer",
       "dotnet",
       new vscode.ShellExecution("dotnet", args)
     )

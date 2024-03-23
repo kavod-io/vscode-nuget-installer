@@ -44,8 +44,8 @@ export class NugetPackagePanel {
       NugetPackagePanel.currentPanel._panel.reveal(ViewColumn.One)
     } else {
       const panel = window.createWebviewPanel(
-        "showNugetPackageManager",
-        "Nuget Package Manager",
+        "showNugetPackageInstaller",
+        "Nuget Package Installer",
         ViewColumn.One,
         {
           enableScripts: true,
@@ -100,7 +100,7 @@ export class NugetPackagePanel {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';connect-src *; img-src *;">
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
-          <title>Nuget Package Manager</title>
+          <title>Nuget Package Installer</title>
         </head>
         <body>
           <div id="root"></div>

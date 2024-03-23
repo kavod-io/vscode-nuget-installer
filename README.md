@@ -1,2 +1,2 @@
-# vscode-nuget-package-manager README
+# vscode-nuget-installer README
 
