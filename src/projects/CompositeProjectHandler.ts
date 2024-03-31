@@ -1,5 +1,8 @@
-import { AddPackagesCommand, RemovePackagesCommand } from "@kavod-io/vscode-nuget-installer-api"
-import { ProjectHandler } from "."
+import {
+  AddPackagesCommand,
+  ProjectHandler,
+  RemovePackagesCommand,
+} from "@kavod-io/vscode-nuget-installer-api"
 
 class CompositeProjectHandler implements ProjectHandler {
   private handlers: ProjectHandler[] = []

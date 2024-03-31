@@ -1,6 +1,7 @@
 import {
   AddPackagesCommand,
   Project,
+  ProjectHandler,
   RemovePackagesCommand,
 } from "@kavod-io/vscode-nuget-installer-api"
 import { DOMParser } from "@xmldom/xmldom"
@@ -8,7 +9,6 @@ import * as fs from "fs"
 import * as path from "path"
 import * as vscode from "vscode"
 import * as xpath from "xpath"
-import { ProjectHandler } from "."
 
 const loadProjects = async () => {
   const files = await vscode.workspace.findFiles("**/*.{csproj,fsproj,vbproj}")
