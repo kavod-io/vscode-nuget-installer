@@ -4,6 +4,7 @@
   "description": "GUI to install nuget packages",
   "version": "0.0.1",
   "publisher": "kavod-io",
+  "icon": "assets/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/kavod-io/vscode-nuget-installer"
