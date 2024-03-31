@@ -45,12 +45,8 @@ export interface RemoveCompleteMessage {
   commandId: string
 }
 
-// Need a class that can:
-// * parse projects from source (e.g. file system)
-// * add/remove nuget packages given a package id/version, package source, and list of project targets
-
 export interface Project {
-  path: string // consider a vscode.Uri instead.
+  path: string
   projectName: string
   packages: ProjectPackage[]
 }

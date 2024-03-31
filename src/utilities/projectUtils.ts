@@ -7,18 +7,18 @@ import { AddPackagesCommand, Project, RemovePackagesCommand } from "../contracts
 
 const loadProjects = async () => {
   const files = await vscode.workspace.findFiles("**/*.{csproj,fsproj,vbproj}")
-  const projects: Project[] = files.map((x) => x.fsPath).map((x) => parseProject(x))
+  const projects: Project[] = files.map((x) => parseProject(x))
   projects.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
   return projects
 }
 
-const parseProject = (projectPath: string): Project => {
-  const projectContent = fs.readFileSync(projectPath, "utf8")
+const parseProject = (projectUri: vscode.Uri): Project => {
+  const projectContent = fs.readFileSync(projectUri.fsPath, "utf8")
   const document = new DOMParser().parseFromString(projectContent)
   const packagesReferences = xpath.select("//ItemGroup/PackageReference", document) as Node[]
   const project: Project = {
-    path: projectPath,
-    projectName: path.basename(projectPath),
+    path: projectUri.fsPath,
+    projectName: path.basename(projectUri.fsPath),
     packages: [],
   }
 
