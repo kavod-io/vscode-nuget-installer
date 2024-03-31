@@ -1,29 +1,28 @@
+import {
+  AddPackagesCommand,
+  Project,
+  RemovePackagesCommand,
+} from "@kavod-io/vscode-nuget-installer-api"
 import { DOMParser } from "@xmldom/xmldom"
 import * as fs from "fs"
 import * as path from "path"
 import * as vscode from "vscode"
 import * as xpath from "xpath"
-import { AddPackagesCommand, Project, RemovePackagesCommand } from "../contracts"
+import { ProjectHandler } from "."
 
 const loadProjects = async () => {
   const files = await vscode.workspace.findFiles("**/*.{csproj,fsproj,vbproj}")
-  const projects: Project[] = files.map((x) => parseProject(x))
-  projects.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
-  return projects
+  files.sort((a, b) => (a.fsPath < b.fsPath ? -1 : a.fsPath > b.fsPath ? 1 : 0))
+  return files.map((x) => parseProject(x))
 }
 
 const parseProject = (projectUri: vscode.Uri): Project => {
   const projectContent = fs.readFileSync(projectUri.fsPath, "utf8")
   const document = new DOMParser().parseFromString(projectContent)
   const packagesReferences = xpath.select("//ItemGroup/PackageReference", document) as Node[]
-  const project: Project = {
-    path: projectUri.fsPath,
-    projectName: path.basename(projectUri.fsPath),
-    packages: [],
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  packagesReferences.forEach((p: any) => {
+  const packages = packagesReferences.map((p: any) => {
     let version = p.attributes.getNamedItem("Version")
     if (version) {
       version = version.value
@@ -33,13 +32,17 @@ const parseProject = (projectUri: vscode.Uri): Project => {
         version = "not specifed"
       }
     }
-    const projectPackage = {
+    return {
       id: p.attributes.getNamedItem("Include").value,
       version: version,
     }
-    project.packages.push(projectPackage)
   })
-  return project
+
+  return {
+    path: projectUri.fsPath,
+    projectName: path.basename(projectUri.fsPath),
+    packages,
+  }
 }
 
 const addPackage = (message: AddPackagesCommand) => addOrRemovePackages(message)
@@ -87,4 +90,11 @@ const executeBuildTask = async (task: vscode.Task) => {
   })
 }
 
-export { addPackage, loadProjects, removePackage }
+const dotNetProjectHandler: ProjectHandler = {
+  loadProjects,
+  addPackage,
+  removePackage,
+  dispose: () => {},
+}
+
+export { dotNetProjectHandler }
