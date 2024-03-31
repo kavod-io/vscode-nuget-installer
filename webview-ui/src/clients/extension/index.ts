@@ -7,7 +7,7 @@ import {
   PackageSource,
   Project,
   RemovePackagesCommand,
-} from "../../contracts"
+} from "@kavod-io/vscode-nuget-installer-api"
 import { vscode } from "../../utilities/vscode"
 
 // TODO we could probably do this better...

@@ -1,6 +1,6 @@
 import type { WebviewApi } from "vscode-webview"
 import { mockPostMessage } from "./mockVsCode"
-import { Command } from "../contracts"
+import { Command } from "@kavod-io/vscode-nuget-installer-api"
 
 /**
  * A utility wrapper around the acquireVsCodeApi() function, which enables

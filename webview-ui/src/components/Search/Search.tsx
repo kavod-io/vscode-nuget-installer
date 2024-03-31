@@ -1,5 +1,5 @@
+import { PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { ChangeEventHandler } from "react"
-import { PackageSource } from "../../contracts"
 
 type SearchProps = {
   includePrerelease: boolean

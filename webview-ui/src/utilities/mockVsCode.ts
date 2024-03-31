@@ -1,4 +1,10 @@
-import { AddPackagesCommand, Command, Message, Project, RemovePackagesCommand } from "../contracts"
+import {
+  AddPackagesCommand,
+  Command,
+  Message,
+  Project,
+  RemovePackagesCommand,
+} from "@kavod-io/vscode-nuget-installer-api"
 
 let projectData: Project[] = [
   {

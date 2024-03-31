@@ -1,7 +1,7 @@
+import { Credentials, PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { QueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { compareSemVer } from "semver-parser"
-import { Credentials, PackageSource } from "../../contracts"
 import {
   AutocompleteResponse,
   NugetMetadataResponse,
@@ -9,7 +9,7 @@ import {
   RegistrationIndexResponse,
   RegistrationPage,
   SearchParameters,
-  SearchQueryServiceResponse
+  SearchQueryServiceResponse,
 } from "./types"
 import { pageSize } from "./useNugetService"
 
@@ -29,9 +29,9 @@ const fetchAutocomplete = async (
       skip: 0,
       take: 10,
       prerelease: includePrerelease ? "true" : "false",
-      semVerLevel: "2.0"
+      semVerLevel: "2.0",
     } as SearchParameters,
-    headers: { Authorization: getAuthenticationHeader(credentials) }
+    headers: { Authorization: getAuthenticationHeader(credentials) },
   })
 
   return response.data.data
@@ -64,7 +64,7 @@ const fetchPackageVersionMetadata = async (
       pages,
       selectedVersion,
       lower: pages.map((p) => compareSemVer(selectedVersion, p.lower)),
-      upper: pages.map((p) => compareSemVer(selectedVersion, p.upper))
+      upper: pages.map((p) => compareSemVer(selectedVersion, p.upper)),
     })
     // TODO not sure how to handle.
     return null
@@ -75,7 +75,7 @@ const fetchPackageVersionMetadata = async (
     if (!item) {
       console.log({
         message: "registration items present but could not find a matching version",
-        page
+        page,
       })
     }
     return item ?? null
@@ -84,9 +84,9 @@ const fetchPackageVersionMetadata = async (
       queryKey: ["nuget", "metadata-items", page["@id"]],
       queryFn: () =>
         axios.get<RegistrationPage>(page["@id"], {
-          headers: { Authorization: getAuthenticationHeader(credentials) }
+          headers: { Authorization: getAuthenticationHeader(credentials) },
         }),
-      staleTime: 10 * 60 * 1000 // 10min
+      staleTime: 10 * 60 * 1000, // 10min
     })
 
     if (response.status >= 200 && response.status < 300 && response.data.items) {
@@ -94,9 +94,9 @@ const fetchPackageVersionMetadata = async (
     }
 
     console.log({
-      message: "Failed to request registration page",
+      "message": "Failed to request registration page",
       response,
-      "@id": page["@id"]
+      "@id": page["@id"],
     })
     return null
   }
@@ -116,9 +116,9 @@ const fetchNugetPackages = async (
       skip: page * pageSize,
       take: pageSize,
       prerelease: includePrerelease ? "true" : "false",
-      semVerLevel: "2.0"
+      semVerLevel: "2.0",
     } as SearchParameters,
-    headers: { Authorization: getAuthenticationHeader(credentials) }
+    headers: { Authorization: getAuthenticationHeader(credentials) },
   })
 
   return data.data
@@ -127,7 +127,7 @@ const fetchNugetPackages = async (
 const fetchSearchQueryServiceUrl = async ({ url, credentials }: PackageSource) => {
   const result = await axios.get<NugetMetadataResponse>(url, {
     method: "get",
-    headers: { Authorization: getAuthenticationHeader(credentials) }
+    headers: { Authorization: getAuthenticationHeader(credentials) },
   })
   const queryServiceUrl = result.data.resources.find((r) =>
     r["@type"].startsWith("SearchQueryService")
@@ -142,7 +142,7 @@ const fetchSearchQueryServiceUrl = async ({ url, credentials }: PackageSource) =
   return {
     queryServiceUrl,
     metadataUrl,
-    autocompleteUrl
+    autocompleteUrl,
   }
 }
 
@@ -157,7 +157,7 @@ const fetchPackageMetadata = async (
     {
       method: "get",
       baseURL: metadataUrl,
-      headers: { Authorization: getAuthenticationHeader(credentials) }
+      headers: { Authorization: getAuthenticationHeader(credentials) },
     }
   )
   return response.data.items
@@ -171,5 +171,5 @@ export {
   fetchNugetPackages,
   fetchPackageMetadata,
   fetchPackageVersionMetadata,
-  fetchSearchQueryServiceUrl
+  fetchSearchQueryServiceUrl,
 }

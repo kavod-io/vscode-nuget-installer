@@ -1,5 +1,5 @@
+import { Project } from "@kavod-io/vscode-nuget-installer-api"
 import { PackageInfo } from "../../clients/nuget"
-import { Project } from "../../contracts"
 
 type InstallButtonProps = {
   selectedProjects: Project[] | null

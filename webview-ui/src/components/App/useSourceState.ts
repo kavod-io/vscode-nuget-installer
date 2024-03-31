@@ -1,5 +1,5 @@
+import { PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { useCallback, useEffect, useState } from "react"
-import { PackageSource } from "../../contracts"
 import { fetchSources } from "../../clients/extension"
 
 const useSourceState = () => {
@@ -24,7 +24,7 @@ const useSourceState = () => {
   return {
     sources,
     currentSource,
-    updateCurrentSource
+    updateCurrentSource,
   }
 }
 

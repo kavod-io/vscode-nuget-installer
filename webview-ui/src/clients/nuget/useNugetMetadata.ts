@@ -1,8 +1,8 @@
+import { PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { PackageSource } from "../../contracts"
+import { fetchPackageVersionMetadata } from "./api"
 import { useNugetServiceIndex } from "./useNugetServiceIndex"
 import { useRegistrationIndex } from "./useRegistrationIndex"
-import { fetchPackageVersionMetadata } from "./api"
 
 export const useNugetMetadata = (
   source: PackageSource | null,
@@ -19,6 +19,6 @@ export const useNugetMetadata = (
     queryFn: () =>
       data && selectedVersion && source
         ? fetchPackageVersionMetadata(source, client, data, selectedVersion)
-        : null
+        : null,
   })
 }

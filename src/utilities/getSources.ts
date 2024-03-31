@@ -1,7 +1,7 @@
-import * as vscode from "vscode"
-import { Credentials } from "../contracts"
-import { promisify } from "util"
+import { Credentials } from "@kavod-io/vscode-nuget-installer-api"
 import { exec } from "child_process"
+import { promisify } from "util"
+import * as vscode from "vscode"
 
 /**
  * A definition for the Nuget sources configured in this extension's settings.

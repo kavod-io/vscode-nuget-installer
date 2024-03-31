@@ -1,6 +1,6 @@
+import { Project } from "@kavod-io/vscode-nuget-installer-api"
 import { useCallback, useMemo } from "react"
 import { useNugetMetadata, useNugetService } from "../../clients/nuget"
-import { Project } from "../../contracts"
 import { InstallButton, UninstallButton } from "../Buttons"
 import { PackageList } from "../PackageList"
 import { PackageMetadata } from "../PackageMetadata"
