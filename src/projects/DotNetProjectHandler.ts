@@ -10,8 +10,10 @@ import * as path from "path"
 import * as vscode from "vscode"
 import * as xpath from "xpath"
 
+const acceptedExtensions = ["csproj", "fsproj", "vbproj"]
+
 const loadProjects = async () => {
-  const files = await vscode.workspace.findFiles("**/*.{csproj,fsproj,vbproj}")
+  const files = await vscode.workspace.findFiles(`**/*.{${acceptedExtensions.join(",")}}`)
   files.sort((a, b) => (a.fsPath < b.fsPath ? -1 : a.fsPath > b.fsPath ? 1 : 0))
   return files.map((x) => parseProject(x))
 }
@@ -50,7 +52,11 @@ const addPackage = (message: AddPackagesCommand) => addOrRemovePackages(message)
 const removePackage = (message: RemovePackagesCommand) => addOrRemovePackages(message)
 
 const addOrRemovePackages = async (message: AddPackagesCommand | RemovePackagesCommand) => {
-  for (let i = 0; i < message.projects.length; i++) {
+  const dotnetProjects = message.projects.filter((p) =>
+    acceptedExtensions.some((ex) => p.path.endsWith(ex))
+  )
+
+  for (let i = 0; i < dotnetProjects.length; i++) {
     const project = message.projects[i]
     const args = [message.command, project.path.replace(/\\/g, "/"), "package", message.packageId]
 
