@@ -1,5 +1,5 @@
+import { PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { useQuery } from "@tanstack/react-query"
-import { PackageSource } from "../../contracts"
 import { fetchSearchQueryServiceUrl } from "./api"
 
 // TODO there are actually multiple urls of each type for high availability.  We should fail over
@@ -14,7 +14,7 @@ export const useNugetServiceIndex = (source: PackageSource | null): Services | n
   const { data, status, isFetched } = useQuery({
     queryKey: ["nuget", "metadata", source?.url],
     queryFn: () => (source ? fetchSearchQueryServiceUrl(source) : null),
-    staleTime: 10 * 60 * 1000 // 10min
+    staleTime: 10 * 60 * 1000, // 10min
   })
   if (data && status === "success" && isFetched) {
     return data

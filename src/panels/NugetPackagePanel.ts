@@ -1,9 +1,9 @@
+import { Command, Message } from "@kavod-io/vscode-nuget-installer-api"
 import { Disposable, Uri, ViewColumn, Webview, WebviewPanel, window } from "vscode"
-import { Command, Message } from "../contracts"
+import { projectManager } from "../projects"
 import { getNonce } from "../utilities/getNonce"
 import { getSources } from "../utilities/getSources"
 import { getUri } from "../utilities/getUri"
-import { addPackage, loadProjects, removePackage } from "../utilities/projectUtils"
 
 export class NugetPackagePanel {
   public static currentPanel: NugetPackagePanel | undefined
@@ -125,7 +125,7 @@ export class NugetPackagePanel {
         switch (command.command) {
           case "getProjects": {
             // TODO load projects from multiple providers.
-            const projects = await loadProjects()
+            const projects = await projectManager.loadProjects()
             postMessage(webview, {
               command: "setProjects",
               commandId,
@@ -145,7 +145,7 @@ export class NugetPackagePanel {
           }
 
           case "add": {
-            await addPackage(command)
+            await projectManager.addPackage(command)
             postMessage(webview, {
               command: "addCompleted",
               commandId,
@@ -154,7 +154,7 @@ export class NugetPackagePanel {
           }
 
           case "remove": {
-            await removePackage(command)
+            await projectManager.removePackage(command)
             postMessage(webview, {
               command: "removeCompleted",
               commandId,

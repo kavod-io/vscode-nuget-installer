@@ -1,6 +1,6 @@
+import { Project } from "@kavod-io/vscode-nuget-installer-api"
 import { FC } from "react"
 import { PackageInfo } from "../../clients/nuget"
-import { Project } from "../../contracts"
 
 interface ProjectItemProps {
   project: Project

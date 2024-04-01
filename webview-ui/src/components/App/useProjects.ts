@@ -1,7 +1,7 @@
+import { Project } from "@kavod-io/vscode-nuget-installer-api"
 import { useCallback, useEffect, useState } from "react"
 import { fetchProjects, installPackage, uninstallPackage } from "../../clients/extension"
 import { PackageInfo } from "../../clients/nuget"
-import { Project } from "../../contracts"
 
 const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([])

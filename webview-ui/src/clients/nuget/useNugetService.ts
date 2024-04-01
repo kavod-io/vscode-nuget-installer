@@ -1,7 +1,7 @@
+import { PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { PackageSource } from "../../contracts"
-import { useNugetServiceIndex } from "./useNugetServiceIndex"
 import { fetchNugetPackages } from "./api"
+import { useNugetServiceIndex } from "./useNugetServiceIndex"
 
 export const pageSize = 20
 
@@ -31,7 +31,7 @@ const useNugetService = (
         return undefined
       }
       return firstPageParam - 1
-    }
+    },
   })
 }
 

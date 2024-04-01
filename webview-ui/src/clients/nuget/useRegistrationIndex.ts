@@ -1,8 +1,8 @@
 // https://learn.microsoft.com/en-us/nuget/api/service-index
 // https://api.nuget.org/v3/index.json produces NugetMetadata
 
+import { PackageSource } from "@kavod-io/vscode-nuget-installer-api"
 import { useQuery } from "@tanstack/react-query"
-import { PackageSource } from "../../contracts"
 import { fetchPackageMetadata } from "./api"
 
 export const useRegistrationIndex = (
@@ -17,6 +17,6 @@ export const useRegistrationIndex = (
     queryFn: () =>
       source && searchUrl?.metadataUrl && packageName
         ? fetchPackageMetadata(source, searchUrl?.metadataUrl, packageName)
-        : null
+        : null,
   })
 }
